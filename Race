@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define lli long long int
+#define MAXN 200000
+lli n, k;
+lli ans;
+    ifstream fin ("race.in");
+    ofstream fout("race.out");
+int solve(int dist)
+{
+    int endspeed;
+    fin>>endspeed;
+    int up = 0;
+    int down = 0;
+    int time = 0;
+    for(int speed = 1;;speed++){
+        up += speed;
+        time++;
+        if(up  + down >= dist) return time;
+        if(speed>=endspeed){
+            down+= speed;
+            time++;
+            if(up  +down>= dist) return time;
+        }
+    }
+}
+int main()
+{
+    //ifstream fin("D://3.in");
+    fin>>k>>n;
+    //cout<<k<<endl;
+    for(int i=0;i<n;i++){
+        fout<<solve(k)<<endl;
+
+
+    }
+}
