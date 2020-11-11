@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define lli long long int
+#define MAXN 200000
+lli n, k;
+set<int> start;
+int a[10][10];
+bool appears(int id)
+{
+    for(int i  =0;i<n;i++){
+        for(int j =0;j<n;j++){
+            if(a[i][j] ==id )return true;
+        }
+    }
+    return false;
+}
+bool ontop(int first, int second)
+{
+    int up= n,  down =0 ,left =n, right =0;
+    for(int i = 0;i<n;i++){
+        for(int j  =0;j<n;j++){
+            if(a[i][j] == second)
+                up  = max(up, i);            ///is first under second. If there is one occruence of second, first is under
+                down  = min(down, i);
+                left = max(left, j);
+                right =  min(right, j);
+        }
+    }
+    for(int i = down; i<=up; i++){
+        for(int j = right; j<= left;j++){
+            if(a[i][j] == first) return true;
+        }
+    }
+    return false;
+
+}
+int main()
+{
+    ifstream fin("art.in");
+    ofstream fout("art.out");
+    fin>>n;
+    for(int i  =0;i<n;i++){
+        string x;
+        fin>>x;
+        for(int j = 0;j<n;j++){
+            a[i][j] = x[i] - 48;
+        }
+
+    }
+    int ans  =0;
+    for(int i  =1;i<10;i++){
+        if(appears(i)){
+            bool first = true;
+            for(int j  =1;j<10;j++){
+                if(i==j)continue;
+                if(appears(j) && ontop(i, j))
+                    first =false;
+            }
+            if(first) ans++;
+        }
+    }
+    fout<<ans<<endl;
+}
