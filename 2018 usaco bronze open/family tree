@@ -1,0 +1,121 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define lli long long int
+#define MAXN 200000
+lli n;
+string bes; string els;
+int adj[300][300] ={0};
+ifstream fin("family.in");
+ofstream fout("family.out");
+struct stuff{
+    int beslist =0;;
+    int elslist =0;
+    int visited = 0;
+};
+stuff cows[300];
+int IDmaker = 0;
+map<string, int> cowID;
+void print(string ans , string first, string second)
+{
+    //cout<< first<<" is the "<<ans<<" of "<<second<<endl;
+    fout<< first<<" is the "<<ans<<" of "<<second<<endl;
+    exit(0);
+}
+void update(string x)
+{
+    auto found = cowID.find(x);
+    if(found == cowID.end()){
+        cowID.insert(pair<string, int> (x, IDmaker));
+        IDmaker++;
+    }
+}
+void dfs(int id, bool bessie, int moved)
+{
+    if(bessie){
+        cows[id].beslist = moved;
+        cows[id].visited++;
+    }
+    else{
+        cows[id].elslist = moved;
+        cows[id].visited++;
+    }
+    if(cows[id].visited == 2 && cows[id].elslist <=1){
+        //if(cows[id].elslist <=cows[id].beslist) goto here;
+        string x ="";
+        if(cows[id].elslist == 0) x = "mother";
+        else if(cows[id].elslist == 1) {
+                x = "aunt";
+                if(cows[id].beslist ==1) {
+                    x = "SIBLINGS";
+                    fout<<x<<endl;
+                    exit(0);
+                }
+        }
+        else {
+            x = "COUSIN";
+            fout<<x<<endl;
+            exit(0);
+        }
+        for(int i =0 ;i<cows[id].beslist -2;i++){
+            x = "great-" +x;
+        }
+        //cout<<els<< " "<<cows[id].elslist<< " "<<cows[id].beslist<<endl;
+        print(x, els, bes);
+    }
+    //here:;
+    if(cows[id].visited == 2 && cows[id].beslist <=1){
+        string x ="";
+        if(cows[id].beslist == 0) x = "mother";
+        else if(cows[id].beslist == 1) {
+                x = "aunt";
+                if(cows[id].elslist ==1) {
+                    x = "SIBLINGS";
+                    fout<<x<<endl;
+                    exit(0);
+                }
+        }
+        else {
+            x = "COUSIN";
+            fout<<x<<endl;
+            exit(0);
+        }
+        for(int i =0 ;i<cows[id].elslist -2;i++){
+            x = "great-" +x;
+        }
+        //cout<<cows[id].elslist<< " "<<bes<< " "<<cows[id].beslist<<endl;
+        print(x, bes, els);
+    }
+    for(int j  =0;j<=300;j++){
+        if(adj[id][j] ==1)dfs(j, bessie, moved+1);
+    }
+}
+int main()
+{
+    fin>>n>>bes>>els;
+    update(bes);
+    update(els);
+    for(int z  =0;z<n;z++){
+        string x,y;
+        fin>>x>>y;
+        update(x);
+        update(y);
+        auto j = cowID.find(x);
+        auto i  =cowID.find(y);
+        adj[i->second][j->second] = 1;
+    }
+    /*
+    for(int i  =0;i<10;i++){
+        for(int j  =0;j<10;j++){
+            cout<<adj[i][j]<< " ";
+        }
+        cout<<endl;
+    }
+    */
+    cout<<bes<< " "<<els<<endl;
+    auto found = cowID.find(bes);
+    dfs(found->second, true, 0);
+    auto found2 = cowID.find(els);
+    dfs(found2->second, false, 0);
+    fout<<"NOT RELATED"<<endl;
+
+}
