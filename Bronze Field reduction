@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define lli long long int
+#define MAXN 200000
+lli n ,m;
+bool small(pair<int,int> a, pair<int,int> b)
+{
+    return a.first< b.first;
+}
+bool big(pair<int,int> a, pair<int, int> b)
+{
+    return a.first>b.first;
+}
+int main()
+{
+   cin>>n;
+   vector<pair<int,int>> largestx;
+   vector<pair<int,int>> largesty;
+   vector<pair<int,int>> lowestx;
+   vector<pair<int,int>> lowesty;
+   for(int i  =0;i<n;i++){
+      int x, y;
+      cin>>x>>y;
+      largestx.push_back(make_pair(x,y));
+      largesty.push_back(make_pair(y, x));
+      lowestx.push_back(make_pair(x,y));
+      lowesty.push_back(make_pair(y, x));
+   }
+   sort(largestx.begin(), largestx.end(), big);
+   sort(largesty.begin(), largesty.end(), big);
+   sort(lowestx.begin(), lowestx.end(), small);
+   sort(lowesty.begin(), lowesty.end(), small);
+   lli ans  =1000000000000000000;
+   for(int i  =0;i<4;i++){
+    for(int j = 0;j<4;j++){
+        for(int k  =0;k<4; k++){    ///Dont need to calcuate the acutal points, just number of cows
+            for(int l  =0;l<4; l++){
+                int total_inside = 0;
+                for(auto it: largestx){
+                    if(it.first<=largestx[i].first && it.first>=lowestx[j].first && it.second<=largesty[k].first && it.second>=lowesty[l].first) total_inside++;
+                }
+            if(total_inside>= n-3){
+                ans =min(ans, (lli)(largestx[i].first - lowestx[j].first)*(largesty[k].first -lowesty[l].first));
+            }
+
+            }
+        }
+
+    }
+   }
+   cout<<ans<<endl;
+
+
+
+
+
+}
