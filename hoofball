@@ -1,0 +1,62 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define lli long long int
+#define MAXN 200000
+int ans = 0;
+lli n;
+vector<pair<int,int>> cows;
+set<int> couple;
+void pass(int pos, int old, int times)
+{
+    int left = -100000;
+    int right = 1000000;
+    //for(int z  =0;z<n;z++)
+            //cout<<cows[z].second<<endl;
+    //cout<<endl;
+    if(pos>0) left = cows[pos-1].first;
+    if(pos<n-1) right = cows[pos+1].first;
+    if(cows[pos].first -  left <= right - cows[pos].first){
+        cows[pos-1].second++;
+        if(pos-1== old){
+            if(times==1)couple.insert(cows[pos].first);
+            return ;
+        }
+        pass(pos-1, pos, times+1);
+    }
+    else{
+    cows[pos+1].second++;
+    if(pos+1 == old) {
+        if(times==1) couple.insert(cows[pos].first);
+        return ;
+    }
+    pass(pos+1, pos, times+1);
+    }
+}
+
+int main()
+{
+    ifstream fin ("hoofball.in");
+    ofstream fout("hoofball.out");
+    fin>>n;
+    for(int i=0;i<n;i++){
+        int x;
+        fin>>x;
+        cows.push_back(make_pair(x, 0));
+    }
+    sort(cows.begin() ,cows.end());
+    for(int i  =0;i<n;i++){
+        pass(i, i, 0);
+        //if(cows[z].second == 0) ans++;
+       // }
+       // cout<<endl;
+    }
+    int ans = 0;
+    int other = 0;
+    for(int z  =0;z<n;z++){
+            //cout<<cows[z].second<<endl;
+        if(cows[z].second == 0) ans++;
+        if (cows[z].second ==2 && couple.find(cows[z].first)!= couple.end()) other++;
+    }
+    cout<<other/2<<endl;;
+    fout<<ans+other/2<<endl;
+}
