@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define lli long long int
+#define MAXN 200000
+lli n,m, r;
+vector<int> cows;
+bool cmp(int a, int b){
+return a>b;
+}
+bool comp(pair<int,int> a, pair<int,int>b)
+{
+    return a.first>b.first;
+}
+int main()
+{
+    freopen("rental.in", "r", stdin);
+    freopen("rental.out", "w", stdout);
+    cin>>n>>m>>r;
+    vector<int> cows;
+    vector<pair<int,int>> store;
+    vector<int> rent;
+    for(int i  =0;i<n;i++){
+        int x;
+        cin>>x;
+        cows.push_back(x);
+    }
+    for(int i  =0;i<m; i++){
+        int gallons, cents;
+        cin>>gallons>>cents;
+        store.push_back(make_pair(cents, gallons));
+    }
+    for(int i  =0;i<r;i++){
+        int cents;
+        cin>>cents;
+        rent.push_back(cents);
+    }                                                                                                       ///Input all the values
+    sort(cows.begin(), cows.end(), cmp);                           
+    sort(store.begin(), store.end(), comp);
+    sort(rent.begin(), rent.end(), cmp);                                                                    ///Sort all the values
+    lli istore = 0;
+    lli irent = 0;                                                                                         ///Bad practice to delete an existing array, have a global pointer to positions
+    lli i  =0;                                             
+    lli total  =0;
+    while(i<n){
+        lli gallons = cows[i];                                                                       
+        lli money_from_store = 0, shop_location = istore;
+        lli last  =0;
+        while(shop_location<m){                                                                          ///Precondition to not go out of bounds
+                //cout<<"a"<<endl;
+            lli bought = (lli)min(gallons, (lli)store[shop_location].second);                               ///See if the bought is the store max buying, or amount left to give per cow
+            money_from_store+= store[shop_location].first * bought;                                       ///Find money bought from store
+            gallons-= bought;
+            if(gallons == 0){
+                last = bought;                                                                            ///Find amount that store bought. will be used later (if larger than rent, delete it)
+                break;
+            }
+            else{
+                shop_location++;                                                                           ///Continue if shop buys all
+            }
+        }
+            if(irent >= r || money_from_store > rent[irent]){                                             ///If there is no more to rent (then of course store is only option) or money from store is larger
+                total+= money_from_store;
+                istore = shop_location;
+                if(istore<m) store[istore].second -= last;
+                i++;                                                                                      ///Go to next cow since at store, it is best to use the most producing cow
+
+            }
+            else{
+                total+= rent[irent];                           
+                n--;                                                                                      ///we edit the back instead of the front since, it is better to give the worst performing cow
+                irent++;
+            }
+        }
+
+
+    cout<<total<<endl;
+
+}
