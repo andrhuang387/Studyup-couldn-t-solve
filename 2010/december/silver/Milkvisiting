@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define lli long long int
+#define MAXN 200000
+#define faster ios_base::sync_with_stdio(false),cin.tie(0),cout.tie(0);
+#define mod 1000000007
+#define vi vector<int>
+#define vpi vector<pair<int,int>>
+#define pb push_back
+#define mp make_pair
+lli n, m;
+///Store all the paths from some arbitrary location
+///Given endpoint, go backwards and find start point;
+map<int, vector<int>> paths;
+vector<int> adj[MAXN];
+int visited[MAXN] = {0};
+int comp[100005];
+int num  =0;
+char col[100005];
+void dfs(int x){
+    if(comp[x]) return ;
+    comp[x] = num;
+    for(auto t: adj[x]) {
+        if(col[t] == col[x]) dfs(t);
+    }
+}
+int main()
+{
+    freopen("milkvisits.in", "r", stdin);
+    freopen("milkvisits.out", "w", stdout);
+    cin>>n>>m;
+    string s;
+    cin>>s;
+    for(int i  =1; i<n+1; i++){
+        col[i] = s[i-1];
+    }
+    for(int i  =0;i<n-1;i++){
+        int a, b;
+        cin>>a>>b;
+        adj[a].pb(b);
+        adj[b].pb(a);
+    }
+    for(int i  =1; i<n+1; i++){
+        if(!comp[i]){
+            num++;
+            dfs(i);
+        }
+    }
+    for(int i  =0;i<m;i++){
+        int a, b; char c;
+        cin>>a>>b>>c;
+        if(col[a] == c || comp[a] != comp[b]) cout<<1;
+        else cout<<0;
+    }
+    cout<<endl;
+}
