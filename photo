@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define lli long long int
+#define MAXN 50001
+#define faster ios_base::sync_with_stdio(false),cin.tie(0),cout.tie(0);
+#define mod 1000000007
+#define vi vector<int>
+#define vpi vector<pair<int,int>>
+#define pb push_back
+#define mp make_pair
+int n, k;
+lli largest [8];
+lli smallest[8];
+char a[101][101];
+int ans = 0;
+bool cmp (pair<int,int> a, pair<int,int>b)
+{
+    return a.first < b.first;
+}
+int main()
+{
+   cin>>n>>k;
+   vector<pair<int,int>> pairs;
+   for(int i = 0;i<k;i++){
+     int begin, end;
+     cin>>begin>>end;
+     if(begin>end) swap(begin, end);
+     pairs.push_back({begin, i});
+     pairs.push_back({end, i});
+   }
+   sort(pairs.begin(), pairs.end(), cmp);
+   int ans  =0;
+   set<int> appear;
+   for(int i = 0;i<pairs.size();i++){
+        auto found = appear.find(pairs[i].second);
+        if(found != appear.end()){
+            appear.clear();
+            ans++;
+        }
+        else{
+            appear.insert(pairs[i].second);
+        }
+   }
+   cout<<ans+1<<endl;
+
+
+}
