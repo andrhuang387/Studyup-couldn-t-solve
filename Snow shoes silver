@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define lli long long int
+#define faster ios_base::sync_with_stdio(false),cin.tie(0),cout.tie(0);
+#define MAXN 251
+#define vi vector<int>
+#define vpi vector<pair<int,int>>
+#define pb push_back
+#define mp make_pair
+int n, b;
+int adj[MAXN];
+int visited[MAXN][MAXN] ={0};
+int ans = 100000;
+pair<int,int> shoes[MAXN];
+///Initially wanted to do a bfs but a recursive function would work even better
+
+void visit(int pos, int shoe)
+{
+
+    if(visited[shoe][pos] != 0)return ;
+    visited[shoe][pos]++;
+    if(pos == n-1){
+        ans = min(ans, shoe);
+        return ;
+    }
+    for(int i  =1;i<=shoes[shoe].second && i+pos<n;i++){
+        if(adj[pos+i]<= shoes[shoe].first) visit(pos+i, shoe);
+    }
+
+    for(int i = shoe+1; i<b;i++){
+        if(adj[pos] <= shoes[i].first) visit(pos, i);
+    }
+}
+int main()
+{
+    freopen("snowboots.in", "r", stdin);
+    freopen("snowboots.out","w", stdout);
+    cin>>n>>b;
+    for(int i = 0;i<n;i++){
+        cin>>adj[i];
+    }
+    for(int i  =0;i<b;i++){
+        int d, l;
+        cin>>d>>l;
+        shoes[i] = {d, l};
+    }
+    visit(0, 0);
+    cout<<ans<<endl;
+}
