@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define MAXN 100002
+#define lli long long int
+lli n, k ,r;
+//#define f first
+//#define s second
+string s;
+char re(lli location, lli total)
+{
+    if(location<s.length()) return s[location];
+    if(location<total/2) return (re(location, total/2));
+    else{
+        return(re((location-1)%(total/2),total/2));
+    }
+}
+int main()
+{
+    freopen("cowcode.in","r",stdin);
+    freopen("cowcode.out","w",stdout);
+   cin>>s>>n;
+   lli i = s.length();
+   while(i<n)i*=2;
+   char res =  re(n-1,i  );
+   cout<< res<<endl;;
+
+
+
+}
