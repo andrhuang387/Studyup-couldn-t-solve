@@ -1,0 +1,92 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define lli long long int
+#define f first
+#define s second
+#define pb push_back
+#define MAXN 1001
+#define INF 1000000000000000000
+#define mod 1000000007
+#define loop(i, a,b) for  (int i=(a); i<= (signed)(b); i++)
+#define lp(i,a) for(int i = 0;i<(signed)(a); i++)
+lli n, t;
+set<lli> a;
+bool toleft(set<lli>a, lli location, lli radius)
+{
+    if(*a.begin() < location - radius){
+        lli cur = *a.lower_bound(location - radius);
+        ///want all values equal or greater than location
+        lli curradius = radius -2;
+        while(cur != *a.begin()){
+            lli next = *a.lower_bound(cur - curradius);
+            if(next>= cur) return false;
+            cur = next;
+            cout<<cur<<endl;
+            curradius -=2;
+        }
+    }
+    return true;
+}
+bool toright(set<lli>a, lli location, lli radius)
+{
+    if(*a.rbegin() > location + radius){
+        ///lli cur = *(a.upper_bound(*location + radius)-1);///smaller or equal to
+        auto it = a.upper_bound(location  +radius);
+        it--;
+        ///Get all values less than or equal to
+        lli cur = *it;
+        lli curradius = radius -2;
+        while(cur != *a.rbegin()){
+            ///lli next = *(a.upper_bound(cur + curradius)-1);
+            auto n = a.upper_bound(cur  +curradius);
+            n--;
+            lli next = *n;
+            if(next<= cur) return false;
+            cur = next;
+            curradius -=2;
+        }
+    }
+    return true;
+}
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    //freopen("angry.in","r",stdin);
+    freopen("D://2.in","r",stdin);
+    //freopen("angry.out","w",stdout);
+    cin>>n;
+    lp(i,n){
+        int x;
+        cin>>x;
+        x*=2;
+        a.insert(x);
+    }
+    lli max = 1000000000;
+    lli min = 0;
+    while(min != max){
+        //cout<<min<< " "<<max<<endl;
+        lli mid = (min + max)/2;
+        lli  left = *a.begin();
+        lli right = *a.rbegin();
+        while(left < right){
+            cout<<left<< " " <<right<<endl;
+            lli m  = (left  + right+1)/2; ///why plus 1?
+            if(toleft(a, m, mid)){
+                left = m;
+            }
+            else{
+                right = m -1;
+            }
+        }
+        cout<<endl;
+        if(toright(a, left, mid)){
+            max = mid;
+        }
+        else{
+            min = mid +1;
+        }
+    }
+    printf("%.1f",min/2.0);
+    return 0;
+
+}
