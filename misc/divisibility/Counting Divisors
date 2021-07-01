@@ -12,7 +12,7 @@ typedef vector<pair<lli,lli>> vpii;
 #define mod 1000000007
 ///create prime divisors, and add. loop  ,if 2 output
 int main() {
-	lli n;
+  lli n;
   cin>>n;
   vector<int> have(1000000, 0);
   lp(i,n){
