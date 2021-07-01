@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define MAXN 3003
+#define s second
+#define f first
+#define lli long long int
+#define pb push_back
+typedef vector<lli> vi;
+typedef vector<pair<lli,lli>> vpii;
+#define lp(i, n)    for(int i = 0; i<n; i++)
+#define inf 1000000000
+#define mod 1000000007
+int main() {
+	lli n, k;
+  cin>>n>>k;
+  map<vector<pair<lli,lli>>, lli> pairs;
+  lli ans = 0;
+  for(lli i = 0 ;  i<n; i++){
+    lli x;cin>>x;
+    vector<pair<lli,lli>> temp; ///find divisors
+    for(lli j =2; j*j <= x; j++){
+      if(x%j ==0){
+        lli times = 0;
+        while(x%j ==0) {x/=j; times++;}
+        if(times%k != 0)temp.pb({j, times%k}); ///only want to store values that are mod k != 0
+      }
+    }
+    if(x > 1)temp.pb({x, 1});  //could be prime numner, where in that case, we add it if value not 1
+    vpii  complement = temp;
+    for(auto& it: complement)it.s = k - it.s; ///create the value of one the compelment map
+    ans+= pairs[complement];  ///add to the number of values that is a suitable complement
+    pairs[temp]++;           ///add that simplified prime factorization to the map
+  }
+  cout<<ans<<endl;
+  
+}
