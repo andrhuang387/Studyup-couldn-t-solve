@@ -40,7 +40,7 @@ int main() {
     else if(it.s.size() == n){
       it.s.erase(it.s.begin());
       for(int p = 0; p<*it.s.begin(); p++){
-        ans*=it.f;
+        ans*=it.f;;
       }
     }
   }
